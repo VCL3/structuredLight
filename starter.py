@@ -4,6 +4,7 @@ import cv2
 import numpy
 import sys
 import os
+from PointCloudApp import PointCloudApp
 
 # Get command line arguments or print usage and exit
 if len(sys.argv) > 2:
@@ -60,20 +61,24 @@ nx =
 # 1 * n array all pixels
 ny = 
 
+# Specify the inverse of calibration matrix
+K_inv = numpy.array([[1/float(600),0,-8/float(15)],
+                     [0,1/float(600),-2/float(5)],
+                     [0,0,1]])
 
+# For each point in disparity map construct a XYZ point
+xyz = []
+Z_max = 8
+thres = b * f / Z_max
+for i in range(w):
+    for j in range(h):
+        if disparity[i][j] > thres:
+            Z = b * f / disparity[i][j]
+            p_cam = K_inv * [i,j,1]
+            p_cam *= Z 
+            xyz.append(p_cam)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Call point cloud to render
+pcl = PointCloudApp(xyz, None, True)
+pcl.run()
 
