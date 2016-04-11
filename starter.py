@@ -55,8 +55,10 @@ n = w * h
 b = 0.05
 f = 600
 
-
-
+# 1 * 3 array XYZ
+nx = 
+# 1 * n array all pixels
+ny = 
 
 
 
