@@ -41,6 +41,37 @@ matcher = cv2.StereoSGBM_create(min_disparity,
 # actual disparities.
 disparity = matcher.compute(cam_image, proj_image) / 16.0
 
+print disparity
+
 # Pop up the disparity image.
 cv2.imshow('Disparity', disparity/disparity.max())
 while cv2.waitKey(5) < 0: pass
+
+# Get the shape of disparity image, calculate n
+w, h = disparity.shape
+n = w * h
+
+# Set up the parameters used to get the XYZ data
+b = 0.05
+f = 600
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
