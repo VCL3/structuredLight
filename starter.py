@@ -54,6 +54,11 @@ n = w * h
 b = 0.05
 f = 600
 
+# 1 * 3 array XYZ
+nx = 
+# 1 * n array all pixels
+ny = 
+
 # Specify the inverse of calibration matrix
 K_inv = numpy.array([[1/float(600),0,-8/float(15)],
                      [0,1/float(600),-2/float(5)],
@@ -76,3 +81,4 @@ xyz = numpy.array(xyz)
 # Call point cloud to render
 pcl = PointCloudApp(xyz, None, True)
 pcl.run()
+
