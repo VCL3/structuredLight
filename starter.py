@@ -42,8 +42,6 @@ matcher = cv2.StereoSGBM_create(min_disparity,
 # actual disparities.
 disparity = matcher.compute(cam_image, proj_image) / 16.0
 
-print disparity
-
 # Pop up the disparity image.
 cv2.imshow('Disparity', disparity/disparity.max())
 while cv2.waitKey(5) < 0: pass
@@ -69,9 +67,11 @@ for i in range(w):
     for j in range(h):
         if disparity[i][j] > thres:
             Z = b * f / disparity[i][j]
-            p_cam = K_inv * [i,j,1]
+            p_cam = numpy.dot(K_inv, [i,j,1])
             p_cam *= Z 
+            p_cam[0], p_cam[1] = p_cam[1], p_cam[0] 
             xyz.append(p_cam)
+xyz = numpy.array(xyz)
 
 # Call point cloud to render
 pcl = PointCloudApp(xyz, None, True)
