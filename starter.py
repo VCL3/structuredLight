@@ -86,7 +86,7 @@ xyz = numpy.array(mat * K_inv.transpose())
 K_inv_ = numpy.array([[1/float(600),0,-8/float(15)],
                      [0,1/float(600),-2/float(5)],
                      [0,0,1]])
-xyz_non = []
+xyz = []
 Z_max = 8
 thres = b * f / Z_max
 for i in range(w):
@@ -96,8 +96,8 @@ for i in range(w):
             p_cam = numpy.dot(K_inv_, [i,j,1])
             p_cam *= Z 
             p_cam[0], p_cam[1] = p_cam[1], p_cam[0] 
-            xyz_non.append(p_cam)
-xyz_non = numpy.array(xyz_non)
+            xyz.append(p_cam)
+xyz = numpy.array(xyz)
 """
 
 # Call point cloud to render
