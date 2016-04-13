@@ -26,7 +26,7 @@ assert(proj_image.shape == cam_image.shape)
 # http://goo.gl/U5iW51 for details).
 min_disparity = 0
 max_disparity = 16
-window_size = 11
+window_size = 21
 param_P1 = 0
 param_P2 = 20000
 
@@ -54,10 +54,10 @@ n = w * h
 b = 0.05
 f = 600
 
-# 1 * 3 array XYZ
-nx = 
-# 1 * n array all pixels
-ny = 
+# # 1 * 3 array XYZ
+# nx = 
+# # 1 * n array all pixels
+# ny = 
 
 # Specify the inverse of calibration matrix
 K_inv = numpy.array([[1/float(600),0,-8/float(15)],
