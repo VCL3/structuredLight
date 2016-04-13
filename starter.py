@@ -26,7 +26,7 @@ assert(proj_image.shape == cam_image.shape)
 # http://goo.gl/U5iW51 for details).
 min_disparity = 0
 max_disparity = 16
-window_size = 11
+window_size = 35
 param_P1 = 0
 param_P2 = 20000
 
@@ -60,14 +60,15 @@ x_range = numpy.arange(0,h,1)
 y_range = numpy.arange(0,w,1)
 xx, yy = numpy.meshgrid(x_range,y_range) 
 
-# Create a mask
+# Create a mask by checking the disparity criteria
 Z_max = 8
 thres = b * f / Z_max
 mask = numpy.greater(disparity,thres)
 
+# Calculate the depths
 Z = b * f / disparity
 
-# Specify the inverse of calibration matrix
+# Hardcode the inverse of calibration matrix
 K_inv = numpy.matrix([[1/float(600),0,-8/float(15)],
                      [0,1/float(600),-2/float(5)],
                      [0,0,1]])
@@ -75,10 +76,12 @@ K_inv = numpy.matrix([[1/float(600),0,-8/float(15)],
 d = Z[mask].reshape((-1,1))
 
 # For each (xx, yy), multiply them by its corresponding d
+# Then stack them together to build V transpose
 mat = numpy.hstack( ( numpy.multiply(xx[mask].reshape((-1,1)),d),
                       numpy.multiply(yy[mask].reshape((-1,1)),d),
                       d) )
 
+# Finally use a simple matrix multiplication to find the n-by-3 point set
 xyz = numpy.array(mat * K_inv.transpose())
 
 """
