@@ -54,31 +54,52 @@ n = w * h
 b = 0.05
 f = 600
 
-# 1 * 3 array XYZ
-nx = 
-# 1 * n array all pixels
-ny = 
+# Try to create a 3*N matrix where each column is a point
+# In the format of [i,j,Z]T(ranspose)
+x_range = numpy.arange(0,h,1)
+y_range = numpy.arange(0,w,1)
+xx, yy = numpy.meshgrid(x_range,y_range) 
+
+# Create a mask
+Z_max = 8
+thres = b * f / Z_max
+mask = numpy.greater(disparity,thres)
 
 # Specify the inverse of calibration matrix
-K_inv = numpy.array([[1/float(600),0,-8/float(15)],
+K_inv = numpy.matrix([[1/float(600),0,-8/float(15)],
                      [0,1/float(600),-2/float(5)],
                      [0,0,1]])
 
+d = disparity[mask].reshape((-1,1))
+print numpy.multiply(d,xx[mask].reshape((-1,1)))
+
+# For each (xx, yy), multiply them by its corresponding d
+mat = numpy.hstack( ( numpy.multiply(xx[mask].reshape((-1,1)),d),
+                      numpy.multiply(yy[mask].reshape((-1,1)),d),
+                      d) )
+
+xyz = numpy.array(mat * K_inv.transpose())
+
+"""
+# Non-vectorized version
 # For each point in disparity map construct a XYZ point
-xyz = []
+K_inv_ = numpy.array([[1/float(600),0,-8/float(15)],
+                     [0,1/float(600),-2/float(5)],
+                     [0,0,1]])
+xyz_non = []
 Z_max = 8
 thres = b * f / Z_max
 for i in range(w):
     for j in range(h):
         if disparity[i][j] > thres:
             Z = b * f / disparity[i][j]
-            p_cam = numpy.dot(K_inv, [i,j,1])
+            p_cam = numpy.dot(K_inv_, [i,j,1])
             p_cam *= Z 
             p_cam[0], p_cam[1] = p_cam[1], p_cam[0] 
-            xyz.append(p_cam)
-xyz = numpy.array(xyz)
+            xyz_non.append(p_cam)
+xyz_non = numpy.array(xyz_non)
+"""
 
 # Call point cloud to render
 pcl = PointCloudApp(xyz, None, True)
 pcl.run()
-
