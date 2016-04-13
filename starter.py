@@ -65,13 +65,14 @@ Z_max = 8
 thres = b * f / Z_max
 mask = numpy.greater(disparity,thres)
 
+Z = b * f / disparity
+
 # Specify the inverse of calibration matrix
 K_inv = numpy.matrix([[1/float(600),0,-8/float(15)],
                      [0,1/float(600),-2/float(5)],
                      [0,0,1]])
 
-d = disparity[mask].reshape((-1,1))
-print numpy.multiply(d,xx[mask].reshape((-1,1)))
+d = Z[mask].reshape((-1,1))
 
 # For each (xx, yy), multiply them by its corresponding d
 mat = numpy.hstack( ( numpy.multiply(xx[mask].reshape((-1,1)),d),
